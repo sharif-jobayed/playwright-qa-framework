@@ -2,9 +2,9 @@ import { expect, Locator, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class CartPage extends BasePage {
-  readonly items: Locator;
-  readonly checkoutButton: Locator;
-  readonly continueShoppingButton: Locator;
+  private readonly items: Locator;
+  private readonly checkoutButton: Locator;
+  private readonly continueShoppingButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,8 +17,20 @@ export class CartPage extends BasePage {
     await expect(this.page.getByText('Your Cart', { exact: true })).toBeVisible();
   }
 
+  async expectAtCart(): Promise<void> {
+    await this.expectUrl(/cart\.html/);
+  }
+
+  async expectItemCount(count: number): Promise<void> {
+    await expect(this.items).toHaveCount(count);
+  }
+
   async itemNames(): Promise<string[]> {
     return this.items.locator('.inventory_item_name').allTextContents();
+  }
+
+  async expectItemNames(expected: string[]): Promise<void> {
+    expect(await this.itemNames()).toEqual(expected);
   }
 
   async removeItem(name: string): Promise<void> {

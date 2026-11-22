@@ -2,10 +2,10 @@ import { expect, Locator, Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LoginPage extends BasePage {
-  readonly usernameInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginButton: Locator;
-  readonly errorMessage: Locator;
+  private readonly usernameInput: Locator;
+  private readonly passwordInput: Locator;
+  private readonly loginButton: Locator;
+  private readonly errorMessage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -32,5 +32,9 @@ export class LoginPage extends BasePage {
 
   async expectVisible(): Promise<void> {
     await expect(this.loginButton).toBeVisible();
+  }
+
+  async expectAtLogin(): Promise<void> {
+    await this.expectUrl(/saucedemo\.com\/?$/);
   }
 }

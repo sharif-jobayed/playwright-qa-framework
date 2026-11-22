@@ -1,12 +1,11 @@
-import { test, expect } from '../../src/fixtures/test-fixtures';
+import { test } from '../../src/fixtures/test-fixtures';
 import { invalidCredentials, users } from '../../src/data/users';
 
 test.describe('SUITE-01 Authentication', () => {
-  test('TC-AUTH-01 standard user signs in @smoke', async ({ loginPage, inventoryPage, page }) => {
+  test('TC-AUTH-01 standard user signs in @smoke', async ({ loginPage, inventoryPage }) => {
     await loginPage.goto();
     await loginPage.login(users.standard.username, users.standard.password);
 
-    await expect(page).toHaveURL(/inventory\.html/);
     await inventoryPage.expectLoaded();
   });
 
@@ -30,21 +29,24 @@ test.describe('SUITE-01 Authentication', () => {
     await loginPage.login('', users.standard.password);
     await loginPage.expectError(/username is required/i);
 
-    await loginPage.usernameInput.fill(users.standard.username);
-    await loginPage.passwordInput.fill('');
-    await loginPage.loginButton.click();
+    await loginPage.login(users.standard.username, '');
     await loginPage.expectError(/password is required/i);
   });
 
-  test('TC-AUTH-06 logout ends the session', async ({ loggedInInventory, loginPage, menu, page }) => {
+  test('TC-AUTH-06 logout ends the session', async ({
+    loggedInInventory,
+    loginPage,
+    menu,
+    inventoryPage,
+  }) => {
     await loggedInInventory.expectLoaded();
     await menu.open();
     await menu.logout();
 
-    await expect(page).toHaveURL(/saucedemo\.com\/?$/);
+    await loginPage.expectAtLogin();
     await loginPage.expectVisible();
 
-    await page.goto('/inventory.html');
-    await expect(page).not.toHaveURL(/inventory\.html/);
+    await inventoryPage.openDirectly();
+    await inventoryPage.expectNotAtInventory();
   });
 });

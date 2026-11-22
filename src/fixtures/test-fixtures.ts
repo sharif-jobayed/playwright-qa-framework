@@ -1,4 +1,4 @@
-import { expect, test as base } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { InventoryPage } from '../pages/InventoryPage';
@@ -44,7 +44,6 @@ export const test = base.extend<Fixtures>({
     await loginPage.goto();
     await loginPage.login(users.standard.username, users.standard.password);
     const inventory = new InventoryPage(page);
-    await expect(page).toHaveURL(/inventory\.html/);
     await inventory.expectLoaded();
     await use(inventory);
   },

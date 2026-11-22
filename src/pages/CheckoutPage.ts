@@ -8,14 +8,14 @@ export interface CheckoutDetails {
 }
 
 export class CheckoutPage extends BasePage {
-  readonly firstNameInput: Locator;
-  readonly lastNameInput: Locator;
-  readonly postalCodeInput: Locator;
-  readonly continueButton: Locator;
-  readonly cancelButton: Locator;
-  readonly finishButton: Locator;
-  readonly completeHeader: Locator;
-  readonly errorMessage: Locator;
+  private readonly firstNameInput: Locator;
+  private readonly lastNameInput: Locator;
+  private readonly postalCodeInput: Locator;
+  private readonly continueButton: Locator;
+  private readonly cancelButton: Locator;
+  private readonly finishButton: Locator;
+  private readonly completeHeader: Locator;
+  private readonly errorMessage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -55,6 +55,10 @@ export class CheckoutPage extends BasePage {
   async expectOrderComplete(): Promise<void> {
     await expect(this.completeHeader).toBeVisible();
     await expect(this.page.getByText('Checkout: Complete!')).toBeVisible();
+  }
+
+  async cancel(): Promise<void> {
+    await this.cancelButton.click();
   }
 
   async backHome(): Promise<void> {

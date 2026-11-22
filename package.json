@@ -8,6 +8,7 @@
     "test:ui": "playwright test tests/ui",
     "test:api": "playwright test tests/api",
     "test:chromium": "playwright test --project=chromium",
+    "test:headless": "PW_HEADED=0 playwright test",
     "test:headed": "playwright test --headed",
     "report": "playwright show-report",
     "typecheck": "tsc --noEmit",

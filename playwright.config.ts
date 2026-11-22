@@ -19,6 +19,8 @@ export default defineConfig({
   ],
 
   use: {
+    // Headless is the default. PW_HEADED=1 opts into a visible browser; --headed also works.
+    headless: process.env.PW_HEADED !== '1',
     baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',

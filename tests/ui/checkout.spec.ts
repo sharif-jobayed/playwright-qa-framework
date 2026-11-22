@@ -1,4 +1,4 @@
-import { test, expect } from '../../src/fixtures/test-fixtures';
+import { test } from '../../src/fixtures/test-fixtures';
 import { backpackTotals, checkoutDetails, products } from '../../src/data/checkout';
 import type { CartPage } from '../../src/pages/CartPage';
 import type { CheckoutPage } from '../../src/pages/CheckoutPage';
@@ -30,7 +30,7 @@ test.describe('SUITE-04 Checkout', () => {
 
     await checkoutPage.finish();
     await checkoutPage.expectOrderComplete();
-    await expect(loggedInInventory.cartBadge).toHaveCount(0);
+    await loggedInInventory.expectCartCount(0);
   });
 
   test('TC-CHK-02/03/04 required fields are enforced', async ({
@@ -54,14 +54,14 @@ test.describe('SUITE-04 Checkout', () => {
     loggedInInventory,
     cartPage,
     checkoutPage,
-    page,
   }) => {
     await openInformation(loggedInInventory, cartPage);
 
-    await checkoutPage.cancelButton.click();
+    await checkoutPage.cancel();
 
-    await expect(page).toHaveURL(/cart\.html/);
-    expect(await cartPage.itemNames()).toEqual([products.backpack]);
+    await cartPage.expectAtCart();
+    await cartPage.expectLoaded();
+    await cartPage.expectItemNames([products.backpack]);
   });
 
   test('TC-CHK-06 overview shows correct totals', async ({
@@ -82,24 +82,22 @@ test.describe('SUITE-04 Checkout', () => {
     loggedInInventory,
     cartPage,
     checkoutPage,
-    page,
   }) => {
     await openOverview(loggedInInventory, cartPage, checkoutPage);
 
-    await checkoutPage.cancelButton.click();
+    await checkoutPage.cancel();
 
     // Healer finding: this build returns to Products, not Your Cart. Cart data survives.
-    await expect(page).toHaveURL(/inventory\.html/);
-    await expect(loggedInInventory.cartBadge).toHaveText('1');
+    await loggedInInventory.expectLoaded();
+    await loggedInInventory.expectCartCount(1);
     await loggedInInventory.openCart();
-    expect(await cartPage.itemNames()).toEqual([products.backpack]);
+    await cartPage.expectItemNames([products.backpack]);
   });
 
   test('TC-CHK-08 Back Home after completion', async ({
     loggedInInventory,
     cartPage,
     checkoutPage,
-    page,
   }) => {
     await openOverview(loggedInInventory, cartPage, checkoutPage);
     await checkoutPage.finish();
@@ -107,8 +105,7 @@ test.describe('SUITE-04 Checkout', () => {
 
     await checkoutPage.backHome();
 
-    await expect(page).toHaveURL(/inventory\.html/);
     await loggedInInventory.expectLoaded();
-    await expect(loggedInInventory.cartBadge).toHaveCount(0);
+    await loggedInInventory.expectCartCount(0);
   });
 });

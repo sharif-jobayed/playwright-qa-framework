@@ -9,7 +9,8 @@ planner workflow, an Excel artifact set, then generator/healer-driven automation
 ## What this repo proves
 
 - **Manual QA foundations**: written test plan, five suites, 29 traceable cases, exploratory charters.
-- **Automation design**: Page Object Model, fixtures, typed data, no selectors inside specs.
+- **Automation design**: strict Page Object Model. Specs contain no locators, `page` calls or
+  assertions; page objects expose behaviour methods only.
 - **Playwright preferred locators**: `getByRole`, `getByText`, `getByLabel`; a class selector only to
   scope a product card that has no ARIA role.
 - **TypeScript discipline**: strict mode, `tsc --noEmit` clean.
@@ -116,8 +117,9 @@ npx playwright install chromium firefox
 # 3. Typecheck
 npm run typecheck
 
-# 4. All suites
+# 4. All suites (headless by default)
 npm test
+npm run test:headless
 
 # 5. One suite
 npm run test:ui
@@ -129,6 +131,9 @@ npm run artifacts
 # 7. Open the HTML report
 npm run report
 ```
+
+`test:headless` sets `PW_HEADED=0` explicitly. Playwright Test has no `--headless` flag; headless
+is the default in `playwright.config.ts`. Use `npm run test:headed` for a visible browser.
 
 Override targets with environment variables:
 
@@ -147,14 +152,17 @@ npx playwright test --grep TC-CHK-06
 
 1. **Manual first.** No automated case exists without a written case ID, steps and expected result.
 2. **Fixtures over `beforeEach`.** `loggedInInventory` gives each test a fresh authenticated page.
-3. **User-facing locators.** `getByRole`/`getByText` keep specs readable and resilient to markup refactors.
-4. **Class selectors only for scoping.** Product cards and price/name collections have no ARIA role;
+3. **Strict POM.** Every locator is `private` in a page object. Specs call methods such as
+   `expectCartCount(1)`, `expectItemNames([...])` and `expectAtCart()`. No `getByRole`, `locator()`,
+   `page.goto`, `expect(page)` or `expect()` lives in `tests/ui`.
+4. **User-facing locators.** `getByRole`/`getByText` keep page objects readable and resilient to markup refactors.
+5. **Class selectors only for scoping.** Product cards and price/name collections have no ARIA role;
    every action inside them still uses `getByRole`.
-5. **Data lives in `src/data`.** Test inputs are readable and reusable; credentials never appear inside specs.
-6. **Soft assertions for request logging.** `ApiClient` attaches a non-fatal status check so a 5xx is
+6. **Data lives in `src/data`.** Test inputs are readable and reusable; credentials never appear inside specs.
+7. **Soft assertions for request logging.** `ApiClient` attaches a non-fatal status check so a 5xx is
    visible without masking the real failure.
-7. **Retries only in CI.** Local runs fail fast. CI retries twice to absorb public-demo flakiness.
-8. **Separate `api` project.** API specs do not launch a browser; CI runs them as a distinct job.
+8. **Retries only in CI.** Local runs fail fast. CI retries twice to absorb public-demo flakiness.
+9. **Separate `api` project.** API specs do not launch a browser; CI runs them as a distinct job.
 
 ## Current scope
 
