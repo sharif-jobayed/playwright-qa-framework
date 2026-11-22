@@ -1,4 +1,4 @@
-# Playwright QA Framework
+# Playwright SQA Framework
 
 [![Tests](https://github.com/sharif-jobayed/playwright-qa-framework/actions/workflows/ci.yml/badge.svg?branch=sj-main)](https://github.com/sharif-jobayed/playwright-qa-framework/actions/workflows/ci.yml)
 
