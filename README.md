@@ -132,8 +132,8 @@ npm run artifacts
 npm run report
 ```
 
-`test:headless` sets `PW_HEADED=0` explicitly. Playwright Test has no `--headless` flag; headless
-is the default in `playwright.config.ts`. Use `npm run test:headed` for a visible browser.
+`test:headless` sets `PW_HEADED=0`, `test:headed` sets `PW_HEADED=1`. Playwright Test has no
+`--headless` flag; `playwright.config.ts` reads `PW_HEADED`. A visible browser needs a display.
 
 Override targets with environment variables:
 

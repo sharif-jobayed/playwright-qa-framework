@@ -9,7 +9,7 @@
     "test:api": "playwright test tests/api",
     "test:chromium": "playwright test --project=chromium",
     "test:headless": "PW_HEADED=0 playwright test",
-    "test:headed": "playwright test --headed",
+    "test:headed": "PW_HEADED=1 playwright test",
     "report": "playwright show-report",
     "typecheck": "tsc --noEmit",
     "artifacts": "python3 scripts/generate-manual-artifacts.py"
