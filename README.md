@@ -172,4 +172,3 @@ npx playwright test --grep TC-CHK-06
 - JSONPlaceholder does not persist writes; POST tests verify echo and 201, not database state.
 - No SQL coverage yet. No Docker, no database seeding, no visual regression. Deliberate scope:
   readable, runnable evidence of QA skills rather than architecture theatre.
-  
