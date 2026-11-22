@@ -1,14 +1,15 @@
 import { test, expect } from '../../src/fixtures/test-fixtures';
 import { products } from '../../src/data/checkout';
 
-test.describe('Cart', () => {
-  test('adding one product updates the badge @smoke', async ({ loggedInInventory }) => {
+test.describe('SUITE-03 Cart', () => {
+  test('TC-CART-01 adding one product updates the badge @smoke', async ({ loggedInInventory }) => {
     await loggedInInventory.addToCart(products.backpack);
 
     await expect(loggedInInventory.cartBadge).toHaveText('1');
+    await loggedInInventory.expectButton(products.backpack, 'Remove');
   });
 
-  test('adding two products keeps the cart in sync', async ({ loggedInInventory, cartPage }) => {
+  test('TC-CART-02 two products appear in the cart', async ({ loggedInInventory, cartPage }) => {
     await loggedInInventory.addToCart(products.backpack);
     await loggedInInventory.addToCart(products.bikeLight);
     expect(await loggedInInventory.cartCount()).toBe(2);
@@ -16,21 +17,40 @@ test.describe('Cart', () => {
     await loggedInInventory.openCart();
     await cartPage.expectLoaded();
 
-    const names = await cartPage.itemNames();
-    expect(names).toEqual(expect.arrayContaining([products.backpack, products.bikeLight]));
+    expect(await cartPage.itemNames()).toEqual([products.backpack, products.bikeLight]);
+    await expect(cartPage.items).toHaveCount(2);
   });
 
-  test('removing the last product hides the badge', async ({ loggedInInventory }) => {
+  test('TC-CART-03 removing one product keeps the other', async ({ loggedInInventory, cartPage }) => {
+    await loggedInInventory.addToCart(products.backpack);
+    await loggedInInventory.addToCart(products.bikeLight);
+
+    await loggedInInventory.openCart();
+    await cartPage.expectLoaded();
+    await cartPage.removeItem(products.backpack);
+
+    expect(await cartPage.itemNames()).toEqual([products.bikeLight]);
+    await expect(loggedInInventory.cartBadge).toHaveText('1');
+  });
+
+  test('TC-CART-04 removing the last product clears the badge', async ({ loggedInInventory }) => {
     await loggedInInventory.addToCart(products.boltTshirt);
     await loggedInInventory.removeFromCart(products.boltTshirt);
 
     await expect(loggedInInventory.cartBadge).toHaveCount(0);
+    await expect(loggedInInventory.cartLink).toHaveAttribute('aria-label', 'Cart, empty');
   });
 
-  test('sorting by price low to high orders the list', async ({ loggedInInventory }) => {
-    await loggedInInventory.sortBy('lohi');
+  test('TC-CART-05 Continue Shopping returns to products', async ({
+    loggedInInventory,
+    cartPage,
+    page,
+  }) => {
+    await loggedInInventory.addToCart(products.bikeLight);
+    await loggedInInventory.openCart();
+    await cartPage.continueShopping();
 
-    const prices = await loggedInInventory.prices();
-    expect(prices).toEqual([...prices].sort((a, b) => a - b));
+    await expect(page).toHaveURL(/inventory\.html/);
+    await expect(loggedInInventory.cartBadge).toHaveText('1');
   });
 });

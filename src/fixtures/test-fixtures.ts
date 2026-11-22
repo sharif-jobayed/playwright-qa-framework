@@ -3,6 +3,7 @@ import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { InventoryPage } from '../pages/InventoryPage';
 import { LoginPage } from '../pages/LoginPage';
+import { Menu } from '../pages/Menu';
 import { users } from '../data/users';
 
 /**
@@ -14,6 +15,7 @@ type Fixtures = {
   inventoryPage: InventoryPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
+  menu: Menu;
   loggedInInventory: InventoryPage;
 };
 
@@ -32,6 +34,10 @@ export const test = base.extend<Fixtures>({
 
   checkoutPage: async ({ page }, use) => {
     await use(new CheckoutPage(page));
+  },
+
+  menu: async ({ page }, use) => {
+    await use(new Menu(page));
   },
 
   loggedInInventory: async ({ page, loginPage }, use) => {

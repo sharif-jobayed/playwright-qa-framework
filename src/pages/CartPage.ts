@@ -4,15 +4,17 @@ import { BasePage } from './BasePage';
 export class CartPage extends BasePage {
   readonly items: Locator;
   readonly checkoutButton: Locator;
+  readonly continueShoppingButton: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.items = this.testId('inventory-item');
-    this.checkoutButton = this.testId('checkout');
+    this.items = page.locator('.cart_item');
+    this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
+    this.continueShoppingButton = page.getByRole('button', { name: 'Continue Shopping' });
   }
 
   async expectLoaded(): Promise<void> {
-    await expect(this.page.locator('.title')).toHaveText('Your Cart');
+    await expect(this.page.getByText('Your Cart', { exact: true })).toBeVisible();
   }
 
   async itemNames(): Promise<string[]> {
@@ -22,11 +24,15 @@ export class CartPage extends BasePage {
   async removeItem(name: string): Promise<void> {
     await this.items
       .filter({ hasText: name })
-      .getByRole('button', { name: /remove/i })
+      .getByRole('button', { name: 'Remove' })
       .click();
   }
 
   async checkout(): Promise<void> {
     await this.checkoutButton.click();
+  }
+
+  async continueShopping(): Promise<void> {
+    await this.continueShoppingButton.click();
   }
 }

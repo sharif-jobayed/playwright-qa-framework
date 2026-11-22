@@ -2,7 +2,8 @@ import { Locator, Page } from '@playwright/test';
 
 /**
  * Shared behaviour for every page object.
- * Keeps locator strategy in one place so a selector change is a one-line edit.
+ * Locators are user-facing first: getByRole, getByText, getByLabel.
+ * A class selector is used only to scope a product card, which has no ARIA role.
  */
 export abstract class BasePage {
   protected constructor(protected readonly page: Page) {}
@@ -12,9 +13,11 @@ export abstract class BasePage {
     await this.page.goto(path);
   }
 
-  /** Locator for elements that expose a data-test attribute. */
-  protected testId(id: string): Locator {
-    return this.page.locator(`[data-test="${id}"]`);
+  /** Scope assertions and actions to one product card by its accessible detail-button name. */
+  protected itemCard(name: string): Locator {
+    return this.page
+      .locator('.inventory_item')
+      .filter({ has: this.page.getByRole('button', { name: `View details for ${name}` }) });
   }
 
   async currentUrl(): Promise<string> {
