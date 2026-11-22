@@ -1,5 +1,7 @@
 # Playwright QA Framework
 
+[![Tests](https://github.com/sharif-jobayed/playwright-qa-framework/actions/workflows/ci.yml/badge.svg?branch=sj-main)](https://github.com/sharif-jobayed/playwright-qa-framework/actions/workflows/ci.yml)
+
 End-to-end UI and REST API test automation in TypeScript. Built as a portfolio-grade framework: Page Object Model, shared fixtures, data-driven tests, typed API client, three Playwright projects, CI workflow, and three report formats.
 
 ## What this repo proves
