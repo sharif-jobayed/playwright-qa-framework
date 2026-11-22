@@ -108,32 +108,26 @@ live in `src/data/checkout.ts`.
 ## Run locally
 
 ```bash
-# 1. Install dependencies
 npm ci
-
-# 2. Install browsers if not already present
 npx playwright install chromium firefox
-
-# 3. Typecheck
 npm run typecheck
-
-# 4. All suites (headless by default)
 npm test
-npm run test:headless
-
-# 5. One suite
-npm run test:ui
-npm run test:api
-
-# 6. Rebuild manual artifacts
-npm run artifacts
-
-# 7. Open the HTML report
-npm run report
 ```
 
-`test:headless` sets `PW_HEADED=0`, `test:headed` sets `PW_HEADED=1`. Playwright Test has no
-`--headless` flag; `playwright.config.ts` reads `PW_HEADED`. A visible browser needs a display.
+| Command | Runs |
+| --- | --- |
+| `npm test` | All 54 tests; headless by default |
+| `npm run test:headless` | Explicit headless run (`PW_HEADED=0`) |
+| `npm run test:headed` | Visible browser (`PW_HEADED=1`); needs display |
+| `npm run test:ui` | UI specs only |
+| `npm run test:api` | API specs only |
+| `npm run test:chromium` | Chromium project only |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run artifacts` | Rebuild the Excel workbook |
+| `npm run report` | Open the HTML report |
+
+Playwright Test has no `--headless` flag. `playwright.config.ts` reads `PW_HEADED`:
+`headless: process.env.PW_HEADED !== '1'`. Both scripts set it explicitly.
 
 Override targets with environment variables:
 
@@ -166,8 +160,8 @@ npx playwright test --grep TC-CHK-06
 
 ## Current scope
 
-- 54 tests: 48 UI (24 cases × Chromium + Firefox), 6 API.
-- 29 manual cases; 27 automated, 2 exploratory/manual.
+- 54 tests = 24 UI cases × Chromium + Firefox (48) + 6 API tests.
+- 29 manual cases; 27 automated, 2 exploratory/manual. Every automated case has a `TC-*` title.
 - 3 projects: `chromium`, `firefox`, `api`.
 - Public targets only; no credentials beyond public demo accounts.
 
