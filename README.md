@@ -8,7 +8,7 @@ planner workflow, an Excel artifact set, then generator/healer-driven automation
 
 ## What this repo proves
 
-- **Manual QA foundations**: written test plan, five suites, 29 traceable cases, exploratory charters.
+- **Manual QA foundations**: written test plan, five suites, 29 traceable cases, E2E charters.
 - **Automation design**: strict Page Object Model. Specs contain no locators, `page` calls or
   assertions; page objects expose behaviour methods only.
 - **Playwright preferred locators**: `getByRole`, `getByText`, `getByLabel`; a class selector only to
@@ -87,7 +87,7 @@ flowchart LR
    - `Test Cases` — 29 cases with ID, preconditions, steps, data, expected result, spec file.
    - `Traceability` — case ID to spec file and test title.
    - `Defect Log` — ready-to-use logging template.
-   - `Exploratory` — four timeboxed charters for out-of-scope areas.
+   - `E2E` — four timeboxed charters for out-of-scope areas.
 4. **Generate.** Each automated case has a matching test title `TC-*` in `tests/ui`.
 5. **Heal.** First Chromium run exposed two bad expectations. `specs/healer-log.md` records both
    root causes and fixes. Plan and Excel were corrected alongside the code.
@@ -100,7 +100,7 @@ flowchart LR
 | SUITE-02 | Product catalogue | 6 | 6 |
 | SUITE-03 | Cart | 5 | 5 |
 | SUITE-04 | Checkout | 8 | 8 |
-| SUITE-05 | Session and navigation | 4 | 2 (2 manual/exploratory) |
+| SUITE-05 | Session and navigation | 4 | 2 (2 manual/E2E) |
 
 Credentials and demo users live in `src/data/users.ts`. Product names, prices and expected totals
 live in `src/data/checkout.ts`.
@@ -161,14 +161,14 @@ npx playwright test --grep TC-CHK-06
 ## Current scope
 
 - 54 tests = 24 UI cases × Chromium + Firefox (48) + 6 API tests.
-- 29 manual cases; 27 automated, 2 exploratory/manual. Every automated case has a `TC-*` title.
+- 29 manual cases; 27 automated, 2 E2E/manual. Every automated case has a `TC-*` title.
 - 3 projects: `chromium`, `firefox`, `api`.
 - Public targets only; no credentials beyond public demo accounts.
 
 ## Honest limitations
 
 - Public demo apps can change without notice. CI retries absorb brief instability, not a redesign.
-- Dynamic Catalog demos, `About` navigation and PDF output are exploratory/manual only.
+- Dynamic Catalog demos, `About` navigation and PDF output are E2E/manual only.
 - JSONPlaceholder does not persist writes; POST tests verify echo and 201, not database state.
 - No SQL coverage yet. No Docker, no database seeding, no visual regression. Deliberate scope:
   readable, runnable evidence of QA skills rather than architecture theatre.

@@ -21,7 +21,7 @@ checkout with correct prices and clear validation errors.
 
 ### Out of scope
 
-- Dynamic Catalog demos (`Lazy Load`, `Spinner`, `Slider`): exploratory only. They are UI
+- Dynamic Catalog demos (`Lazy Load`, `Spinner`, `Slider`): E2E only. They are UI
   performance demos, not purchase flows.
 - `About` external navigation to `saucelabs.com`.
 - PDF generation on the completion page: manual smoke only; binary output is not asserted.
@@ -43,7 +43,7 @@ checkout with correct prices and clear validation errors.
 
 | Layer | Coverage |
 | --- | --- |
-| Manual | All cases in `TC-*` list below; exploratory charters for dynamic catalog. |
+| Manual | All cases in `TC-*` list below; E2E charters for dynamic catalog. |
 | Automated | Cases marked `Yes` in `SauceDemo-Manual-Test-Artifacts.xlsx`, sheet `Test Cases`. |
 | Data | Public demo users and product names in `src/data`; no secrets. |
 | Locators | Playwright user-facing locators: `getByRole`, `getByText`, `getByLabel`. Class selectors only to scope a product card, which has no ARIA role. |
@@ -266,7 +266,7 @@ menu disappears after close.
 
 Expected: cart badge absent; products visible.
 
-#### TC-NAV-03 — Dynamic catalog pages load (manual exploratory)
+#### TC-NAV-03 — Dynamic catalog pages load (manual E2E)
 
 1. Sign in; open menu; expand `Dynamic Catalog`.
 2. Open `Lazy Load`, `Spinner`, and `Slider` in turn.
@@ -283,6 +283,6 @@ Expected: `href` is `https://saucelabs.com/`; external navigation not automated.
 
 - Public demo site can change without notice; CI retries absorb brief instability only.
 - `problem_user`, `error_user`, `performance_glitch_user`, `visual_user` are reserved for
-  exploratory charters. Not automated: their behaviour is intentionally defective or slow.
+  E2E charters. Not automated: their behaviour is intentionally defective or slow.
 - Price strings are fixed in the demo catalogue; assert exact strings, not computed floats where
   rounding could differ.
